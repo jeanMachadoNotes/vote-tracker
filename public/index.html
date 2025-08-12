@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote Tracker</title>
+</head>
+<body>
+    <h1>Vote Results</h1>
+    <div id="chart"></div>
+
+    <script>
+        fetch('/votes-summary')
+            .then(res => res.json())
+            .then(data => {
+                const options = {
+                    chart: { type: 'bar'},
+                    series: [{
+                            name: 'Votes',
+                            data: Object.values(data)
+                    }],
+                    xaxis: { cetegories: Object.keys(data) }
+                };
+                new ApexCharts(document.querySelector('#chart'), options).render();
+            });
+    </script>
+</body>
+</html>
