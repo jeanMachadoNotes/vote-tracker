@@ -1,0 +1,12 @@
+# Node Modules
+node_modules/
+
+# Environment variables
+.env
+
+# Vote logs
+votes.txt
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
