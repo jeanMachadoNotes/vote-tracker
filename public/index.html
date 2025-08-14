@@ -4,25 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vote Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 2rem;
+        }
+        #chart {
+            max-width: 600px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Vote Results</h1>
+    <h1>Live Vote Results</h1>
     <div id="chart"></div>
 
     <script>
         fetch('/votes-summary')
             .then(res => res.json())
             .then(data => {
+                const votes = data.votes;
                 const options = {
-                    chart: { type: 'bar'},
+                    chart: { 
+                        type: 'bar'
+                    },
                     series: [{
-                            name: 'Votes',
-                            data: Object.values(data)
+                        name: 'Votes',
+                        data: Object.values(votes)
                     }],
-                    xaxis: { cetegories: Object.keys(data) }
+                    xaxis: { 
+                        categories: Object.keys(votes) 
+                    }
                 };
-                new ApexCharts(document.querySelector('#chart'), options).render();
-            });
+                const chart = new ApexCharts(document.querySelector('#chart'), options);
+                chart.render();
+            })
+            .catch( error => { 
+                document.getElementById('chart').innerHTML = "Error loading chart. ";
+                console.error("Error fetching data:", error);
+            })
     </script>
 </body>
 </html>
