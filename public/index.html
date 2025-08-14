@@ -25,20 +25,23 @@
         fetch('/votes-summary')
             .then(res => res.json())
             .then(data => {
-                const votes = data.votes;
+                if (!data || Object.keys(data).length === 0 ) {
+                    document.getElementById('chart').innerHTML = 'No votes recorded yet';
+                    return;  // Stop further processing
+                }
                 const options = {
                     chart: { 
                         type: 'bar'
                     },
                     series: [{
                         name: 'Votes',
-                        data: Object.values(votes)
+                        data: Object.values(data)
                     }],
                     xaxis: { 
-                        categories: Object.keys(votes) 
+                        categories: Object.keys(data) 
                     }
                 };
-                const chart = new ApexCharts(document.querySelector('#chart'), options);
+                const chart = new ApexCharts(document.getElementById('chart'), options);
                 chart.render();
             })
             .catch( error => { 
